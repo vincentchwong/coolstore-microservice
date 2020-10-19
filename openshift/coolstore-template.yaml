@@ -57,7 +57,7 @@ objects:
           value: ${BOWER_MIRROR}
         from:
           kind: ImageStreamTag
-          name: nodejs:4
+          name: nodejs:10
           namespace: ${IMAGE_STREAM_NAMESPACE}
       type: Source
     triggers:
@@ -445,6 +445,7 @@ objects:
     labels:
       app: inventory
       comp-type: database
+      app.openshift.io/runtime: postgresql
   spec:
     replicas: 1
     selector:
@@ -501,7 +502,7 @@ objects:
         - inventory-postgresql
         from:
           kind: ImageStreamTag
-          name: postgresql:latest
+          name: postgresql:9.6
           namespace: ${IMAGE_STREAM_NAMESPACE}
       type: ImageChange
     - type: ConfigChange
@@ -669,6 +670,7 @@ objects:
     labels:
       app: catalog
       comp-type: database
+      app.openshift.io/runtime: mongodb
     name: catalog-mongodb
   spec:
     replicas: 1
@@ -752,7 +754,7 @@ objects:
         - catalog-mongodb
         from:
           kind: ImageStreamTag
-          name: mongodb:3.2
+          name: mongodb:3.4
           namespace: ${IMAGE_STREAM_NAMESPACE}
       type: ImageChange
     - type: ConfigChange
@@ -802,7 +804,7 @@ objects:
     labels:
       app: rating
   spec:
-    replicas: 0
+    replicas: 1
     selector:
       deploymentconfig: rating
     strategy:
@@ -853,7 +855,7 @@ objects:
             timeoutSeconds: 1
           resources:
             limits:
-              memory: 500Mi
+              memory: 1Gi
             requests:
               memory: 200Mi
         terminationMessagePath: /dev/termination-log
@@ -908,9 +910,10 @@ objects:
     labels:
       app: rating
       comp-type: database
+      app.openshift.io/runtime: mongodb
     name: rating-mongodb
   spec:
-    replicas: 0
+    replicas: 1
     selector:
       deploymentconfig: rating-mongodb
     strategy:
@@ -1010,7 +1013,7 @@ objects:
         - rating-mongodb
         from:
           kind: ImageStreamTag
-          name: mongodb:3.2
+          name: mongodb:3.4
           namespace: ${IMAGE_STREAM_NAMESPACE}
       type: ImageChange
     - type: ConfigChange
@@ -1212,7 +1215,7 @@ objects:
   metadata:
     name: pricing
   spec:
-    replicas: 0
+    replicas: 1
     selector:
       deploymentconfig: pricing
     strategy:
@@ -1367,7 +1370,7 @@ objects:
     labels:
       app: review
   spec:
-    replicas: 0
+    replicas: 1
     selector:
       deploymentconfig: review
     strategy:
@@ -1423,7 +1426,7 @@ objects:
             timeoutSeconds: 1
           resources:
             limits:
-              memory: 500Mi
+              memory: 1Gi
             requests:
               memory: 200Mi
         volumes:
@@ -1470,8 +1473,9 @@ objects:
     labels:
       comp-type: database
       app: review
+      app.openshift.io/runtime: postgresql
   spec:
-    replicas: 0
+    replicas: 1
     selector:
       deploymentconfig: review-postgresql
     strategy:
@@ -1526,7 +1530,7 @@ objects:
         - review-postgresql
         from:
           kind: ImageStreamTag
-          name: postgresql:latest
+          name: postgresql:9.6
           namespace: ${IMAGE_STREAM_NAMESPACE}
       type: ImageChange
     - type: ConfigChange
@@ -1584,7 +1588,7 @@ objects:
       app: netflix
     name: turbine-server
   spec:
-    replicas: 0
+    replicas: 1
     selector:
       deploymentconfig: turbine-server
       component: turbine-server
@@ -1694,7 +1698,7 @@ objects:
       app: netflix
     name: hystrix-dashboard
   spec:
-    replicas: 0
+    replicas: 1
     selector:
       deploymentconfig: hystrix-dashboard
       component: hystrix-dashboard
@@ -1787,12 +1791,12 @@ parameters:
 - description: Git source URI for application
   displayName: Git source repository
   name: GIT_URI
-  required: true
-  value: https://github.com/jbossdemocentral/coolstore-microservice
+  required: true 
+  value: https://github.com/peter-ho-organization/coolstore-microservice
 - displayName: Git branch/tag reference
   name: GIT_REF
   required: true
-  value: master
+  value: stable-ocp-3.11
 - description: Maven mirror url. If nexus is deployed locally, use nexus url (e.g. http://nexus.ci:8081/content/groups/public/)
   displayName: Maven mirror url
   name: MAVEN_MIRROR_URL
