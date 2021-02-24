@@ -22,11 +22,12 @@ public class InventoryService {
 	public Inventory getInventory(String itemId) {
 		Inventory inventory = em.find(Inventory.class,itemId);
 		
-//		List<String> recalledProducts = Arrays.asList("165613","165614");
-//		if (recalledProducts.contains(itemId)) {
-//			inventory.setQuantity(0);
-//		}
-//		System.out.println("******** SET 0 **********");
+		List<String> recalledProducts = Arrays.asList("165613","165614");
+		if (recalledProducts.contains(itemId)) {
+			em.detach(inventory);
+			inventory.setQuantity(0);
+		}
+		System.out.println("******** SET 0 **********");
 		
 		return inventory;
 	}
