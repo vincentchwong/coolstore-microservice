@@ -26,6 +26,7 @@ public class InventoryService {
 		if (recalledProducts.contains(itemId)) {
 			inventory.setQuantity(0);
 		}
+		System.out.println("******** SET 0 **********");
 		
 		return inventory;
 	}
